@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Ananas{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+      $("#ddlCategory,#ddlIl").on("change", function () {
+          var category = $('#ddlCategory').find("option:selected").val();
+          var il = $('#ddlIl').find("option:selected").val();
+          SearchData(category, il)
+      });
+  });
+  function SearchData(category, il) {
+      if (category.toUpperCase() == 'ALL' && il.toUpperCase() == 'ALL') {
+          $('#table11 tbody tr').show();
+      } else {
+          $('#table11 tbody tr:has(td)').each(function () {
+              var rowCategory = $.trim($(this).find('td:eq(1)').text());
+              var rowIl = $.trim($(this).find('td:eq(2)').text());
+              if (category.toUpperCase() != 'ALL' && il.toUpperCase() != 'ALL') {
+                  if (rowCategory.toUpperCase() == category.toUpperCase() && rowIl == il) {
+                      $(this).show();
+                  } else {
+                      $(this).hide();
+                  }
+              } else if ($(this).find('td:eq(1)').text() != '' || $(this).find('td:eq(1)').text() != '') {
+                  if (category != 'all') {
+                      if (rowCategory.toUpperCase() == category.toUpperCase()) {
+                          $(this).show();
+                      } else {
+                          $(this).hide();
+                      }
+                  }
+                  if (il != 'all') {
+                      if (rowIl == il) {
+                          $(this).show();
+                      }
+                      else {
+                          $(this).hide();
+                      }
+                  }
+              }
+
+          });
+      }
+  }
+</script>
+  <h2>Tum Ustalar</h2>
+
+  <p>
+    <a href="{% url 'usta_add' %}">Kayit Ol</a>
+  </p>
+
+  <style>
+    .hello-msg{
+      font-size: 18px;
+      margin-right:20px;
+    }
+  </style>
+
+  <span class="hello-msg"> Merhaba, {{request.user}}</span>
+  <span><a class="hello-msg" href="{% url 'logout' %}">Cikis Yap</a></span>
+
+  <style>
+    #table11 {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    #table11 td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    
+    #table11 tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #table11 tr:hover {background-color: #ddd;}
+    
+    #table11 th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #3059c9;
+      color: white;
+    }
+    </style>
+
+<select class="cl_category" id="ddlCategory">
+  <option value="all">Kategori Sec </option>
+  <option value="Boya Badana">Boya Badana</option>
+  <option value="Elektrik">Elektrik</option>
+  <option value="Cam Balkon">Cam Balkon</option>
+</select>
+<select class="cl_il" id="ddlIl">
+  <option value="all">Il Sec </option>
+  <option value="Istanbul">Istanbul</option>
+  <option value="Ankara">Ankara</option>
+  <option value="Izmir">Izmir</option>
+</select>
+
+
+  <table id="table11" border="1">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Kategori</th>
+        <th>Il</th>
+        <th>Ilce</th>
+        <th>Website</th>
+        <th>Telefon</th>
+        <th>E-Posta</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usta in usta %}
+        <tr>
+          <td><a href="{% url 'usta_change' usta.pk %}">{{ usta.name }}</a></td>
+          <td>{{ usta.category.name }}</td>
+          <td>{{ usta.il.name }}</td>
+          <td>{{ usta.ilce.name }}</td>
+          <td>{{ usta.website }}</td>
+          <td>{{ usta.telefon }}</td>
+          <td>{{ usta.email }}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No person in the database. <a href="{% url 'usta_add' %}">Add the first person</a>.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
