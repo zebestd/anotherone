@@ -7,66 +7,79 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+
+from .decorators import unauthenticated_user
 
 
+@unauthenticated_user
 def registerPage(request):
-    if request.user.is_authenticated:
-        return redirect('usta_changelist')
-    else:
-        form = CreateUserForm()
+    form = CreateUserForm()
 
-        if request.method == 'POST':
-            form = CreateUserForm(request.POST)
-            if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Basariyla kayit oldunuz ' + user + '. Devam etmek icin lutfen giris yapin.')
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Basariyla kayit oldunuz ' +
+                             user + '. Devam etmek icin lutfen giris yapin.')
 
-                return redirect('login')
-        context = {'form': form}
-        return render(request, 'register.html', context)
+            return redirect('login')
+    context = {'form': form}
+    return render(request, 'register.html', context)
 
 
+@unauthenticated_user
 def loginPage(request):
-    if request.user.is_authenticated:
-        return redirect('usta_changelist')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-            user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
-            if user is not None:
-                    login(request, user)
-                    return redirect('usta_changelist')
-            else:
-                messages.info(request, 'kullanici adi VEYA parolayi yanlis girdiniz')
-        context = {}
-        return render(request, 'login.html', context)
+        if user is not None:
+            login(request, user)
+            return redirect('usta')
+        else:
+            messages.info(
+                request, 'kullanici adi VEYA parolayi yanlis girdiniz')
+    context = {}
+    return render(request, 'login.html', context)
+
+
+
+@login_required(login_url='login')
+def userPage(request):
+    usta = Usta.objects.all()
+    print('name:', usta)
+    context = {'usta':usta}
+    return render(request, 'user.html', context)
 
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
+def createUsta(request):
 
-class UstaListView(ListView):
-    model = Usta
-    form_class = UstaForm
-    context_object_name = 'usta'
+    form = UstaForm()
+    if request.method == 'POST':
+        #print('Printing POST:', request.POST)
+        form = UstaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form':form}
+    return render(request, 'form.html', context)
 
+def ustalist(request):
+    usta = Usta.objects.all()
+    return render(request, 'home.html', {'usta': usta})
+    
 
-class UstaCreateView(CreateView):
-    model = Usta
-    form_class = UstaForm
-    success_url = reverse_lazy('usta_changelist')
-
-
-class UstaUpdateView(UpdateView):
-    model = Usta
-    form_class = UstaForm
-    success_url = reverse_lazy('usta_changelist')
+def home(request):
+    context = {}
+    return render(request, 'home.html', context)
 
 
 def load_ilce(request):

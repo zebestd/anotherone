@@ -4,6 +4,8 @@
 
 {% block content %}
 
+<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_usta' %}">Create Usta</a>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
@@ -51,7 +53,7 @@
   <h2>Tum Ustalar</h2>
 
   <p>
-    <a href="{% url 'usta_add' %}">Kayit Ol</a>
+    <a href="{% url 'create_usta' %}">Kayit Ol</a>
   </p>
 
   <style>
@@ -124,7 +126,7 @@
     <tbody>
       {% for usta in usta %}
         <tr>
-          <td><a href="{% url 'usta_change' usta.pk %}">{{ usta.name }}</a></td>
+          <td><a href="{% url 'create_usta' %}">{{ usta.name }}</a></td>
           <td>{{ usta.category.name }}</td>
           <td>{{ usta.il.name }}</td>
           <td>{{ usta.ilce.name }}</td>
@@ -134,7 +136,7 @@
         </tr>
       {% empty %}
         <tr>
-          <td colspan="4">No person in the database. <a href="{% url 'usta_add' %}">Add the first person</a>.</td>
+          <td colspan="4"> <a href="{% url 'create_usta' %}">Ilk kayit olan siz olun</a>.</td>
         </tr>
       {% endfor %}
     </tbody>

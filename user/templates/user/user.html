@@ -1,0 +1,39 @@
+<h1>Usta Profile</h1>
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h2>Usta Form</h2>
+
+  <form method="post" id="ustaForm" data-ilce-url="{% url 'ajax_load_ilce' %}" novalidate>
+    {% csrf_token %}
+    <table>
+      
+      {{ form.as_table }}
+    </table>
+    <button type="submit">Kayit Ol</button>
+    <a href="{% url 'usta_changelist' %}">Geri Don</a>
+  </form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+    $("#id_il").change(function () {
+      var url = $("#ustaForm").attr("data-ilce-url");  
+      var ilId = $(this).val();  
+
+      $.ajax({                      
+        url: url,                    
+        data: {
+          'il': ilId       
+        },
+        success: function (data) {  
+          $("#id_ilce").html(data);  
+        }
+      });
+
+    });
+  </script>
+
+
+{% endblock %}
