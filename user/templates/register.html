@@ -89,6 +89,18 @@
 							</div>
 							{{form.email}}
 						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							{{form.first_name}}
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							{{form.last_name}}
+						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-append">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
@@ -101,6 +113,7 @@
 							</div>
 							{{form.password2}}
 						</div>
+						
 
 
 
@@ -130,8 +143,11 @@
 		var form_fields = document.getElementsByTagName('input')
 		form_fields[1].placeholder='Kullanici Adi...';
 		form_fields[2].placeholder='E-Posta...';
-		form_fields[3].placeholder='Parola Giriniz...';
-		form_fields[4].placeholder='Tekrar Parola Giriniz...';
+		form_fields[3].placeholder='Isim...';
+		form_fields[4].placeholder='Soyisim...';
+		form_fields[5].placeholder='Sifre Giriniz...';
+		form_fields[6].placeholder='Tekrar Sifre Giriniz...';
+		
 
 
 		for (var field in form_fields){	

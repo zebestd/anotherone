@@ -31,6 +31,9 @@ class Usta(models.Model):
     desc = models.TextField(max_length=1000, null=True)
     il = models.ForeignKey(Il, on_delete=models.SET_NULL, null=True)
     ilce = models.ForeignKey(Ilce, on_delete=models.SET_NULL, null=True)
+    image = models.ImageField(default='ananas.jpg',
+                              upload_to='profile_images')
 
     def __str__(self):
         return self.name 
+

@@ -49,19 +49,18 @@ def loginPage(request):
 
 
 @login_required(login_url='login')
-def userPage(request):
-    usta = Usta.objects.all()
-    print('name:', usta)
-    context = {'usta':usta}
-    return render(request, 'user.html', context)
+def profile(request):
+    return render(request, 'user.html')
+
+
 
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
-def createUsta(request):
 
+def createUsta(request):
     form = UstaForm()
     if request.method == 'POST':
         #print('Printing POST:', request.POST)
